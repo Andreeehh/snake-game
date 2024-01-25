@@ -8,3 +8,10 @@ export const Wrapper = styled.div`
   border: 1px solid #000;
   `}
 `;
+
+export const Score = styled.div`
+  ${({ theme }) => css`
+  position: relative;
+  top: -5rem;
+  `}
+`;

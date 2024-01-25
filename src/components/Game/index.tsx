@@ -13,6 +13,19 @@ export const Game = () => {
   const [food, setFood] = useState(INITIAL_FOOD);
   const [direction, setDirection] = useState('RIGHT');
   const [isGameOver, setIsGameOver] = useState(false);
+  const [score, setScore] = useState(0);
+  const [highScore, setHighScore] = useState(0);
+
+  useEffect(() => {
+    const storedHighScore = localStorage.getItem('snakeHighScore');
+    if (storedHighScore) {
+      setHighScore(parseInt(storedHighScore));
+    }
+  }, []);
+
+  const saveHighScore = useCallback(() => {
+    localStorage.setItem('snakeHighScore', String(highScore));
+  }, [highScore]);
 
   const handleKeyPress = useCallback(
     (event: KeyboardEvent) => {
@@ -96,6 +109,7 @@ export const Game = () => {
           x: Math.floor(Math.random() * GRID_SIZE),
           y: Math.floor(Math.random() * GRID_SIZE),
         });
+        setScore((prevScore) => prevScore + 10);
       } else {
         newSnake.pop();
       }
@@ -111,13 +125,25 @@ export const Game = () => {
     setFood(INITIAL_FOOD);
     setDirection('RIGHT');
     setIsGameOver(false);
+    setScore(0);
   };
+
+  useEffect(() => {
+    if (score > highScore) {
+      setHighScore(score);
+      saveHighScore();
+    }
+  }, [score, highScore, saveHighScore]);
 
   return (
     <Styled.Wrapper>
       <Snake snake={snake} />
       <Food x={food.x} y={food.y} />
       <GameOverOverlay isGameOver={isGameOver} onRestart={restartGame} />
+      <Styled.Score>
+        <div>Score: {score}</div>
+        <div>High Score: {highScore}</div>
+      </Styled.Score>
     </Styled.Wrapper>
   );
 };
