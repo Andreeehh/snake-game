@@ -1,7 +1,12 @@
-import { Heading } from 'components/Heading';
+import { Game } from 'components/Game';
+import * as Styled from './styles';
 
 function Home() {
-  return <Heading>Example</Heading>;
+  return (
+    <Styled.Wrapper>
+      <Game></Game>
+    </Styled.Wrapper>
+  );
 }
 
 export default Home;
